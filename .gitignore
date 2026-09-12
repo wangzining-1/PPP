@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+runtime.local.json
+.build/
+work/
+output/
+.ppp-validation/
+.env
+.env.*
+*.pptx
+*.zip

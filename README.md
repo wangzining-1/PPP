@@ -1,7 +1,7 @@
 # PPP — Pixel to PPT Path
 
 ![version](https://img.shields.io/badge/version-3.0-blue)
-![license](https://img.shields.io/badge/license-MIT-green)
+![license](https://img.shields.io/badge/license-GPL--3.0-blue)
 ![graphics](https://img.shields.io/badge/native_graphics-%E2%89%A41000-brightgreen)
 ![platform](https://img.shields.io/badge/platform-Windows%20%2B%20Codex-lightgrey)
 
@@ -64,7 +64,7 @@ cd PPP
   -PresentationSkillDirectory '<Presentations skill 的绝对路径>'
 ```
 
-安装器建立独立 venv、安装固定版本依赖、部署 `ppp` 技能并运行诊断。`@oai/artifact-tool`、Codex、Office 不包含在 MIT 发布包中，不能通过普通 `npm install` 推定获得这些宿主组件。首次安装需要联网下载 Python 依赖；图片不会上传至第三方矢量化服务。
+安装器建立独立 venv、安装固定版本依赖、部署 `ppp` 技能并运行诊断。`@oai/artifact-tool`、Codex、Office 不包含在 本项目发布包中，不能通过普通 `npm install` 推定获得这些宿主组件。首次安装需要联网下载 Python 依赖；图片不会上传至第三方矢量化服务。
 
 Python 图像/OCR依赖由 [requirements.lock](ppp/requirements.lock) 固定版本。安装器写入本机专用的 `runtime.local.json`，记录 Python、Node、模块及 Presentations 验证器路径；该文件不入库，也不应从他人机器复制。目标机器必须已具备上述宿主组件，单纯克隆仓库不能替代这些前置条件。
 
@@ -202,4 +202,4 @@ git push -u origin main
 
 ## License
 
-[MIT](LICENSE)。第三方依赖及宿主应用各自遵循其许可证。
+[GNU GPL-3.0](LICENSE)。第三方依赖及宿主应用各自遵循其许可证。

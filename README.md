@@ -1,11 +1,29 @@
 # PPP — Pixel to PPT Path
 
-![version](https://img.shields.io/badge/version-3.0-blue)
+![version](https://img.shields.io/badge/version-3.1-blue)
 ![license](https://img.shields.io/badge/license-GPL--3.0-blue)
 ![graphics](https://img.shields.io/badge/native_graphics-%E2%89%A41000-brightgreen)
-![platform](https://img.shields.io/badge/platform-Windows%20%2B%20Codex-lightgrey)
+![platform](https://img.shields.io/badge/platform-Codex%20%2B%20Python-lightgrey)
 
 把科研机制图重建为 PowerPoint **原生分组、可编辑路径和真实文字**。先理解、后描摹；忽略背景，图形总数最多 1000。PPP 原名 GaphicAI。
+
+## v3.1：从机制上下文到可编辑矢量
+
+新增 `mechanism.json → 因果层级 → 原生scene → PPTX` 路径，原有位图忠实重建流程保留。
+
+- 宿主视觉模型从位图提取实体、关系与证据；模糊关系明确标注。这里的“学习”是当前任务的结构化理解，不是训练模型。
+- 编译器对明确支持的因果关系分层，强连通分量保留反馈环；抑制用横杠，不确定边用问号且不添加因果箭头。
+- 自动生成GPT内置图像工具提示词；代理按需调用内置工具产生构图参考，再以机制JSON核对并重建原生图形。CLI不直接调用宿主图像工具。
+- 整图哈希缓存、输出完整性检查、稳定ID及磁盘保存场景减少重复工作；不承诺未测量的token下降比例。
+- 新增Python跨平台入口；自动布局输出可编辑机制草图，复杂生物插画和密集连线仍需局部精修。
+
+```bash
+python3 ppp/scripts/run.py mechanism examples/feedback.mechanism.json work/mechanism
+# 使用返回的scene路径；export前配置本机runtime.local.json
+python3 ppp/scripts/run.py export <scene.json> work/candidate.pptx work/candidate.svg --render work/preview.png
+```
+
+详见 [机制关系schema与GPT图像流程](ppp/references/mechanism-workflow.md)、[跨平台运行时配置](ppp/references/portable-runtime.md)、[含反馈/模糊关系示例](examples/feedback.mechanism.json)。层级用于生成与布局，不自动添加PPT动画。`reviewed:true`是实际核对后的声明，非自动科学验证。
 
 ## 特性
 
@@ -16,7 +34,7 @@
 - 组级颜色表、默认色、重复几何定义及 `ref`/`at` 实例。
 - 保存后重读渲染、400% 预览及独立预算审计。
 
-**边界**：本项目需要 Windows、PowerShell 和 Codex 提供的工作区运行时。Python 图像计算本地运行，语义理解仍由模型完成；它不是全离线模型。不能保证任意图像的完美语义分割或像素一致。400% 无连续同向台阶是验收要求，几何检查通过不代表整张渲染图通过。
+**边界**：原有一键安装器需要 Windows/PowerShell；新增 run.py 支持跨平台分派。PPT导出需要 Codex 提供的工作区运行时。Python 图像计算本地运行，语义理解及可选图像生成由宿主模型/工具完成；它不是全离线模型。不能保证任意图像的完美语义分割或像素一致。400% 无连续同向台阶是验收要求，几何检查通过不代表整张渲染图通过。
 
 ## 实现原理
 
@@ -64,7 +82,7 @@ cd PPP
   -PresentationSkillDirectory '<Presentations skill 的绝对路径>'
 ```
 
-安装器建立独立 venv、安装固定版本依赖、部署 `ppp` 技能并运行诊断。`@oai/artifact-tool`、Codex、Office 不包含在 本项目发布包中，不能通过普通 `npm install` 推定获得这些宿主组件。首次安装需要联网下载 Python 依赖；图片不会上传至第三方矢量化服务。
+安装器建立独立 venv、安装固定版本依赖、部署 `ppp` 技能并运行诊断。`@oai/artifact-tool`、Codex、Office 不包含在 本项目发布包中，不能通过普通 `npm install` 推定获得这些宿主组件。首次安装需要联网下载 Python 依赖；本地描摹不上传至第三方矢量化服务；宿主视觉理解和用户选择的内置图像生成按宿主服务处理图像。
 
 Python 图像/OCR依赖由 [requirements.lock](ppp/requirements.lock) 固定版本。安装器写入本机专用的 `runtime.local.json`，记录 Python、Node、模块及 Presentations 验证器路径；该文件不入库，也不应从他人机器复制。目标机器必须已具备上述宿主组件，单纯克隆仓库不能替代这些前置条件。
 
@@ -187,14 +205,18 @@ v3.0发布前运行了34项测试，并用自建小图验证了原生PPT导出�
 
 大段几何保存在磁盘，通过颜色表和引用减少重复存储；不承诺未经测量的模型token节省比例。
 
+v3.1 在 macOS Codex 运行时通过44项测试（含原生PPT导出集成测试）；合成反馈示例导出13个原生图形、6个文本框、0个嵌入图片，已重读并检查400%渲染。未进行PowerPoint桌面编辑测试，未把GPT图像服务调用纳入自动测试。
+
+新增机制测试：`python3 -m unittest discover -s tests -p test_mechanism.py -v`，无需第三方依赖，覆盖反馈、因果顺序、模糊边、抑制横杠、预算、缓存失效与损坏缓存修复。自动框图和旧版描摹需分别验收；不能把结构测试当作生物学或视觉质量证明。
+
 ## 发布到 GitHub
 
 维护现有仓库时，先确认暂存区不含运行配置、用户原图、输出或凭据：
 
 ```bash
-git add README.md LICENSE .gitignore .gitattributes ppp tests
+git add README.md LICENSE .gitignore .gitattributes ppp tests examples
 git diff --cached --stat
-git commit -m "PPP v3.0"
+git commit -m "PPP v3.1: causal mechanism workflow"
 git push -u origin main
 ```
 

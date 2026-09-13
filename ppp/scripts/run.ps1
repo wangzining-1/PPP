@@ -11,12 +11,13 @@ $env:PYTHONUTF8 = '1'
 $env:PYTHONDONTWRITEBYTECODE = '1'
 $env:RUNTIME_NODE_MODULES = $config.node_modules
 if (-not $CommandArguments -or $CommandArguments[0] -eq 'help') {
-    Write-Output 'PPP: doctor | prepare | erase | budget | render | trace | merge | export | finalize | svg | compare | audit. Default budget: 1000 native graphics. Add --help after a command.'
+    Write-Output 'PPP: mechanism | doctor | prepare | erase | budget | render | trace | merge | export | finalize | svg | compare | audit. Default budget: 1000 native graphics. Add --help after a command.'
     exit 0
 }
 $remaining = @()
 if ($CommandArguments.Count -gt 1) { $remaining = $CommandArguments[1..($CommandArguments.Count-1)] }
 switch ($CommandArguments[0]) {
+    'mechanism' { & $config.python (Join-Path $PSScriptRoot 'mechanism.py') @remaining }
     'export' { & $config.node (Join-Path $PSScriptRoot 'scene_to_pptx.mjs') @remaining }
     'finalize' {
         if ($remaining.Count -ge 3) {

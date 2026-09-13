@@ -150,6 +150,9 @@ try {
   });
   if(patched!==patch.size)fail('Native path patch count mismatch');
   if(/<p:pic\b|<a:blip\b/.test(xml))fail('Unexpected picture object');
+  // Artifact Tool emits p:bg with a:noFill for 'none'; honor the scene contract
+  // by omitting the explicit slide background, as the budget auditor requires.
+  if (data.background === 'none') xml = xml.replace(/<p:bg\b[^>]*>[\s\S]*?<\/p:bg>/g, '');
   zip.file('ppt/slides/slide1.xml',xml);
   await fs.writeFile(output,await zip.generateAsync({type:'nodebuffer',compression:'DEFLATE'}),{flag:'wx'});
   const background=data.background??'#FFFFFF';

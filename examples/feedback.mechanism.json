@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "reviewed": true,
+  "nodes": [
+    {"id": "A", "label": "Signal A"},
+    {"id": "B", "label": "Regulator B"},
+    {"id": "C", "label": "Response C"},
+    {"id": "D", "label": "Candidate D"}
+  ],
+  "edges": [
+    {"id": "ab", "source": "A", "target": "B", "kind": "activation", "status": "supported", "evidence": "Synthetic example: A activates B"},
+    {"id": "bc", "source": "B", "target": "C", "kind": "inhibition", "status": "supported", "evidence": "Synthetic example: B inhibits C"},
+    {"id": "ca", "source": "C", "target": "A", "kind": "activation", "status": "supported", "evidence": "Synthetic example: C activates A (feedback)"},
+    {"id": "bd", "source": "B", "target": "D", "kind": "unknown", "status": "uncertain", "evidence": "Synthetic example: unreadable relation, not a scientific claim"}
+  ]
+}

@@ -1,4 +1,4 @@
 interface:
   display_name: "PPP — Pixel to PPT Path"
-  short_description: "机制图转原生PPT：先计划确认、去背景、≤1000图形、曲线与400%边缘验收"
-  default_prompt: "使用 $ppp 重建机制图。先只输出一行计划JSON，确认后生成原生分组、可编辑文字与路径；≤1000图形，0.5px坐标，按400%边缘标准验收。"
+  short_description: "科研机制转可编辑PPT：因果顺序、反馈与模糊关系、GPT图像参考及位图重建"
+  default_prompt: "使用 $ppp 从上下文或参考图提取机制关系，保留证据、反馈与不确定项，按因果层级生成可编辑PPT；需要构图参考时使用内置图像工具。"

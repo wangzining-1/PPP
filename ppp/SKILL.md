@@ -1,11 +1,18 @@
 ---
 name: ppp
-description: Use when users invoke PPP (Pixel to PPT Path) or need scientific raster diagrams reconstructed as editable PowerPoint groups, paths and real text with a 1000-shape budget and edge verification.
+description: Use when users invoke PPP (Pixel to PPT Path) or need scientific mechanisms from context or raster references converted into editable PowerPoint shapes/text, with causal ordering, feedback preservation and optional GPT image composition references.
 ---
 
 # PPP — Pixel to PPT Path
 
 将科研位图重建为 PPT 原生可编辑分组、路径和真实文字。优先保住机制与视觉，在≤1000个图形叶子的预算内去背景、拟合边缘并逐项验收。不是截图包装，也不是任意图片像素一致的保证。
+
+## 入口：先判断输入
+
+- 上下文生成机制图、自动理解位图关系、GPT构图参考：读取 [机制工作流](references/mechanism-workflow.md)。模型一次提取实体、关系、证据和不确定项到 `mechanism.json`，`run.py mechanism` 确定性编译因果层级与原生scene。保留反馈环；模糊边不参与因果排序。
+- 原图忠实重建：使用以下预算描摹流程；机制JSON可辅助核对，但自动框图不能冒充忠实复刻。
+- macOS/Linux或无PowerShell：读取 [跨平台入口](references/portable-runtime.md)。
+- 用户要求GPT图像参考时调用宿主内置 image_gen，工具参数以当前文档为准。其输出是位图参考，最终必须重建为原生PPT；以机制JSON核对生成图，不能反过来拿生成图证明机制。
 
 ## A. 两阶段契约
 
